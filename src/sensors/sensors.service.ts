@@ -24,11 +24,12 @@ export class SensorService {
     }
 
     async create (sensorCreateDto: CreateSensorDto): Promise<Sensor>{
+        console.log(sensorCreateDto)
         if (!sensorCreateDto.sensorCode || !sensorCreateDto.name) throw new BadRequestException('El código de sensor o el nombre no pueden ser nulos');
         var sensorExists = await this.getSensorByCode(sensorCreateDto.sensorCode);
         if (sensorExists) throw new BadRequestException('Ya hay un sensor registrado con ese código');
         
-        if (!sensorCreateDto.type || sensorCreateDto.status) throw new BadRequestException('El tipo o el estado no pueden estar nulos');
+        if (!sensorCreateDto.type || !sensorCreateDto.status) throw new BadRequestException('El tipo o el estado no pueden estar nulos');
         if (sensorCreateDto.type === SensorType.HTTP_POLL && !sensorCreateDto.url) throw new BadRequestException('La URL no puede ser nula con tipo HTTP_POLL');
         
         const sensorCreated = await this.sensorsRepository.create(sensorCreateDto);
