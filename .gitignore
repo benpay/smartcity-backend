@@ -2,6 +2,7 @@
 /dist
 /node_modules
 /build
+*.tsbuildinfo
 
 # Logs
 logs
@@ -11,6 +12,10 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+
+# Local HTTP client/session exports
+cookies.txt
+cookies.txt-d
 
 # OS
 .DS_Store

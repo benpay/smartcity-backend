@@ -1,0 +1,44 @@
+import {
+  IsString, MinLength, IsEnum, IsOptional, IsUrl
+} from 'class-validator';
+import { SensorStatus, SensorType } from '../sensor.entity.js';
+
+export class CreateSensorDto {
+  @IsString()
+  @MinLength(3)
+  name: string;
+
+  @IsString()
+  @MinLength(3)
+  sensorCode: string;
+
+  @IsEnum(SensorType)
+  type: SensorType;
+
+  @IsOptional()
+  @IsEnum(SensorStatus)
+  status?: SensorStatus;
+
+  @IsOptional()
+  @IsUrl()
+  url?: string;
+}
+
+export class UpdateSensorDto {
+  @IsOptional()
+  @IsString()
+  @MinLength(3)
+  name?: string;
+
+  @IsOptional()
+  @IsEnum(SensorType)
+  type?: SensorType;
+
+  @IsOptional()
+  @IsEnum(SensorStatus)
+  status?: SensorStatus;
+
+  @IsOptional()
+  @IsUrl()
+  url?: string;
+}

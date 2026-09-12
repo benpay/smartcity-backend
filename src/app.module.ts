@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { UsersModule } from './users/users.module.js';
 import { AuthModule } from './auth/auth.module.js';
+import { SensorsModule } from './sensors/sensors.module.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -27,7 +28,8 @@ const __dirname = dirname(__filename);
       }),
     }),
     AuthModule,
-    UsersModule
+    UsersModule,
+    SensorsModule
   ],
 })
 export class AppModule {}
