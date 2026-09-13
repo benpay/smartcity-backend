@@ -8,16 +8,16 @@ export class MockController {
   @Get('temp-format-a')
   formatA() {
     return [
-      {
-        sensorCode: 'GAR-101',
-        ts: new Date().toISOString(),
-        valueC: parseFloat((18 + Math.random() * 10).toFixed(1)),
-      },
-      {
-        sensorCode: 'GAR-101',
-        ts: new Date().toISOString(),
-        valueC: parseFloat((18 + Math.random() * 10).toFixed(1)),
-      },
+    {
+      sensorCode: 'GAR-101',
+      ts: new Date().toISOString(),
+      valueC: parseFloat((18 + Math.random() * 10).toFixed(1)),
+    },
+    {
+      sensorCode: 'GAR-101',
+      ts: new Date(Date.now() - 60000).toISOString(), // 1 minuto antes
+      valueC: parseFloat((18 + Math.random() * 10).toFixed(1)),
+    },
     ];
   }
 

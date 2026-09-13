@@ -1,6 +1,7 @@
 import {
   IsString, MinLength, IsEnum, IsOptional, IsUrl
 } from 'class-validator';
+import { PartialType } from '@nestjs/mapped-types';
 import { SensorStatus, SensorType } from '../sensor.entity.js';
 
 export class CreateSensorDto {
@@ -24,21 +25,4 @@ export class CreateSensorDto {
   url?: string;
 }
 
-export class UpdateSensorDto {
-  @IsOptional()
-  @IsString()
-  @MinLength(3)
-  name?: string;
-
-  @IsOptional()
-  @IsEnum(SensorType)
-  type?: SensorType;
-
-  @IsOptional()
-  @IsEnum(SensorStatus)
-  status?: SensorStatus;
-
-  @IsOptional()
-  @IsUrl({ require_tld: false }) // para permitir localhost, sino da error 
-  url?: string;
-}
+export class UpdateSensorDto extends PartialType(CreateSensorDto) {}

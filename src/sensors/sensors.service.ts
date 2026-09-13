@@ -9,46 +9,44 @@ export class SensorService {
     constructor(
         @InjectRepository(Sensor)
         private readonly sensorsRepository: Repository<Sensor>
-    ) {}
+    ) { }
 
-    async getSensorByCode(sensorCode: string): Promise<Sensor | null>{
+    async getSensorByCode(sensorCode: string): Promise<Sensor | null> {
         return await this.sensorsRepository.findOneBy({ sensorCode });
     }
 
-    async getSensorById(id: string): Promise<Sensor | null>{ 
+    async getSensorById(id: string): Promise<Sensor | null> {
         return await this.sensorsRepository.findOneBy({ id });
     }
 
-    async getSensorsAll(){
-        return await this.sensorsRepository.find({ order: {createdAt: 'DESC' } });
+    async getSensorsAll() {
+        return await this.sensorsRepository.find({ order: { createdAt: 'DESC' } });
     }
 
-    async create (sensorCreateDto: CreateSensorDto): Promise<Sensor>{
+    async create(sensorCreateDto: CreateSensorDto): Promise<Sensor> {
         console.log(sensorCreateDto)
-        if (!sensorCreateDto.sensorCode || !sensorCreateDto.name) throw new BadRequestException('El código de sensor o el nombre no pueden ser nulos');
-        var sensorExists = await this.getSensorByCode(sensorCreateDto.sensorCode);
+        const sensorExists = await this.getSensorByCode(sensorCreateDto.sensorCode);
         if (sensorExists) throw new BadRequestException('Ya hay un sensor registrado con ese código');
-        
-        if (!sensorCreateDto.type || !sensorCreateDto.status) throw new BadRequestException('El tipo o el estado no pueden estar nulos');
+
         if (sensorCreateDto.type === SensorType.HTTP_POLL && !sensorCreateDto.url) throw new BadRequestException('La URL no puede ser nula con tipo HTTP_POLL');
-        
-        const sensorCreated = await this.sensorsRepository.create(sensorCreateDto);
+
+        const sensorCreated = this.sensorsRepository.create(sensorCreateDto);
         return await this.sensorsRepository.save(sensorCreated);
     }
 
     async update(id: string, sensorUpdatedto: UpdateSensorDto): Promise<Sensor> {
-        var sensorToUpdate = await this.getSensorById(id);
+        const sensorToUpdate = await this.getSensorById(id);
         if (!sensorToUpdate) throw new BadRequestException('El id no coincide con ningún sensor');
 
         const newType = sensorUpdatedto.type ?? sensorToUpdate.type;
         const newUrl = sensorUpdatedto.url ?? sensorToUpdate.url;
         if (newType === SensorType.HTTP_POLL && !newUrl) { throw new BadRequestException('La url es obligatoria para sensores de tipo HTTP_POLL') }
-        
+
         Object.assign(sensorToUpdate, sensorUpdatedto);
         return await this.sensorsRepository.save(sensorToUpdate);
     }
 
-    async delete(id: string): Promise<void>{
+    async delete(id: string): Promise<void> {
         const sensorToDelete = await this.getSensorById(id);
         if (!sensorToDelete) throw new BadRequestException('El id no coincide con ningún sensor');
         await this.sensorsRepository.remove(sensorToDelete);

@@ -14,20 +14,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly usersService: UsersService,
   ) {
     super({
-        jwtFromRequest: ExtractJwt.fromExtractors([
-            (req: Request) =>
-              (req as Request & { cookies?: Record<string, string> }).cookies?.[
-                config.get('COOKIE_NAME', 'auth_token')
-              ],
-        ]),
-        ignoreExpiration: false,
-        secretOrKey: config.getOrThrow<string>('JWT_SECRET'),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (req: Request) =>
+          (req as Request & { cookies?: Record<string, string> }).cookies?.[
+          config.get('COOKIE_NAME', 'auth_token')
+          ],
+      ]),
+      ignoreExpiration: false,
+      secretOrKey: config.getOrThrow<string>('JWT_SECRET'),
     });
   }
 
-  async validate(payload: { sub:string, email: string }): Promise<User> {
+  async validate(payload: { sub: string, email: string }): Promise<User> {
     const user = await this.usersService.findById(payload.sub);
-    if (!user) { throw new UnauthorizedException (`El usuario ${user} no esta autenticado`)}
+    if (!user) { throw new UnauthorizedException(`El usuario con ID ${payload.sub} no existe o no está autenticado`); }
     return user;
   }
 }
