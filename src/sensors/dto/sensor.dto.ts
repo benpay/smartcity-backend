@@ -39,6 +39,6 @@ export class UpdateSensorDto {
   status?: SensorStatus;
 
   @IsOptional()
-  @IsUrl()
+  @IsUrl({ require_tld: false }) // para permitir localhost, sino da error 
   url?: string;
 }

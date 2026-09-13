@@ -14,4 +14,9 @@ export class IngestionController {
     findBySensor(@Param('id') id: string){
         return this.ingestionService.findBySensor(id);
     }
+
+    @Get()
+    findAll() {
+       return this.ingestionService.findAll();
+    }
 }

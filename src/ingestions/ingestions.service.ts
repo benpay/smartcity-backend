@@ -29,6 +29,13 @@ export class IngestionService{
         });
     }
 
+    findAll(): Promise<IngestionRun[]> {
+        return this.ingestionRunRepository.find({
+            relations: { sensor: true },
+            order: { startedAt: 'DESC' },
+        });
+    }
+
     async ingest( sensorId: string, payload: any): Promise<IngestionRun> {
         const sensor = await this.sensorService.getSensorById(sensorId);
         if (!sensor) throw new BadRequestException('El id del sensor no existe');
